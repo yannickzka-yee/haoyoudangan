@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>好友档案</title>
+
+<!-- 卡通字体：ZCOOL KuaiLe -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=ZCOOL+KuaiLe&display=swap" rel="stylesheet">
+
+<style>
+  /* ============ 基础重置 ============ */
+  * {
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+  }
+  html, body {
+    margin: 0;
+    padding: 0;
+  }
+
+  body {
+    min-height: 100vh;
+    background-color: #fdf6e3;
+    background-image:
+      radial-gradient(circle at 12% 10%, rgba(255, 226, 168, .55) 0%, rgba(255, 226, 168, 0) 42%),
+      radial-gradient(circle at 88% 80%, rgba(186, 230, 253, .5) 0%, rgba(186, 230, 253, 0) 45%),
+      radial-gradient(circle at 75% 8%,  rgba(255, 205, 210, .45) 0%, rgba(255, 205, 210, 0) 38%);
+    font-family: 'ZCOOL KuaiLe', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+    color: #5a4633;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 44px 20px calc(60px + env(safe-area-inset-bottom));
+    position: relative;
+    overflow-x: hidden;
+  }
+
+  /* ============ 背景装饰：云朵 & 星星 ============ */
+  .decor {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+    z-index: 0;
+  }
+
+  .cloud {
+    --w: 130px;
+    position: absolute;
+    width: var(--w);
+    height: calc(var(--w) * 0.36);
+    background: #ffffff;
+    border-radius: 999px;
+    opacity: .92;
+    animation-name: floaty;
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: infinite;
+    box-shadow: 0 10px 20px rgba(190, 165, 120, .12);
+  }
+  .cloud::before,
+  .cloud::after {
+    content: '';
+    position: absolute;
+    background: #ffffff;
+    border-radius: 50%;
+  }
+  .cloud::before {
+    width: calc(var(--w) * 0.46);
+    height: calc(var(--w) * 0.46);
+    left: calc(var(--w) * 0.13);
+    top: calc(var(--w) * -0.24);
+  }
+  .cloud::after {
+    width: calc(var(--w) * 0.34);
+    height: calc(var(--w) * 0.34);
+    right: calc(var(--w) * 0.13);
+    top: calc(var(--w) * -0.15);
+  }
+
+  @keyframes floaty {
+    0%, 100% { transform: translateY(0); }
+    50%      { transform: translateY(-14px); }
+  }
+
+  .star {
+    position: absolute;
+    line-height: 1;
+    opacity: .6;
+    animation-name: twinkle;
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: infinite;
+    animation-duration: 3.4s;
+    user-select: none;
+  }
+
+  @keyframes twinkle {
+    0%, 100% { opacity: .35; transform: scale(.9) rotate(-6deg); }
+    50%      { opacity: .85; transform: scale(1.18) rotate(10deg); }
+  }
+
+  /* ============ 页面主体 ============ */
+  .page {
+    position: relative;
+    z-index: 1;
+    width: min(800px, 100%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .hero {
+    text-align: center;
+    margin-bottom: 26px;
+  }
+
+  .title {
+    margin: 0 0 8px;
+    font-family: 'ZCOOL KuaiLe', 'PingFang SC', 'Microsoft YaHei', cursive;
+    font-size: clamp(44px, 9vw, 78px);
+    letter-spacing: 8px;
+    line-height: 1.15;
+    background: linear-gradient(100deg,
+      #ff6b6b 0%, #ffa94d 20%, #ffd43b 38%,
+      #69db7c 56%, #4dabf7 76%, #b197fc 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+    filter: drop-shadow(2px 3px 0 #ffffff)
+            drop-shadow(0 8px 14px rgba(255, 160, 80, .38));
+  }
+
+  .subtitle {
+    margin: 0;
+    font-size: clamp(15px, 3.4vw, 19px);
+    color: #b08d5e;
+    letter-spacing: 2px;
+  }
+
+  /* ============ 白色卡片 ============ */
+  .card {
+    width: 100%;
+    background: #ffffff;
+    border-radius: 34px;
+    padding: 36px 38px 40px;
+    border: 5px solid #ffffff;
+    box-shadow:
+      0 20px 44px rgba(190, 158, 108, .26),
+      0 6px 0 #f2e5cc,
+      0 2px 0 rgba(255, 255, 255, .9) inset;
+  }
+
+  /* ============ 字段 ============ */
+  .field {
+    margin-bottom: 30px;
+  }
+  .field:last-of-type {
+    margin-bottom: 22px;
+  }
+
+  .field-label {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+    font-size: 21px;
+    line-height: 1.45;
+    color: #6b4f2a;
+    letter-spacing: 1px;
+  }
+
+  .badge {
+    flex: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    font-size: 17px;
+    color: #ffffff;
+    background: linear-gradient(160deg, #ffd166, #ffa93d);
+    box-shadow: 0 4px 0 #eaa138;
+  }
+
+  /* --- 单选选项 --- */
+  .options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+  }
+
+  .option {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 13px 22px;
+    border-radius: 999px;
+    background: #fffaf0;
+    border: 3px solid #ffe3b0;
+    font-size: 19px;
+    color: #6b4f2a;
+    cursor: pointer;
+    user-select: none;
+    transition: transform .16s ease, background .16s ease,
+                border-color .16s ease, box-shadow .16s ease;
+  }
+
+  .option input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+    width: 1px;
+    height: 1px;
+    pointer-events: none;
+  }
+
+  .radio-mark {
+    flex: none;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    border: 3px solid #ffc46b;
+    background: #ffffff;
+    position: relative;
+    transition: all .16s ease;
+  }
+
+  .option.selected {
+    background: #fff3d6;
+    border-color: #ffb84d;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 0 #ffe1ae;
+  }
+  .option.selected .radio-mark {
+    border-color: #ff9f43;
+    background: #ff9f43;
+  }
+  .option.selected .radio-mark::after {
+    content: '';
+    position: absolute;
+    inset: 5px;
+    border-radius: 50%;
+    background: #ffffff;
+  }
+
+  /* --- 文本输入 --- */
+  .text-input {
+    width: 100%;
+    padding: 16px 22px;
+    font-family: inherit;
+    font-size: 19px;
+    color: #5a4633;
+    background: #fffaf0;
+    border: 3px solid #ffe3b0;
+    border-radius: 20px;
+    outline: none;
+    transition: border-color .18s ease, background .18s ease, box-shadow .18s ease;
+  }
+  .text-input::placeholder {
+    color: #ccb99c;
+    font-size: 17px;
+  }
+  .text-input:focus {
+    border-color: #ffb84d;
+    background: #ffffff;
+    box-shadow: 0 0 0 6px rgba(255, 200, 110, .22);
+  }
+
+  /* --- 校验失败 --- */
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    20%      { transform: translateX(-9px); }
+    40%      { transform: translateX(9px); }
+    60%      { transform: translateX(-6px); }
+    80%      { transform: translateX(6px); }
+  }
+  .field.invalid {
+    animation: shake .45s ease;
+  }
+  .field.invalid .field-label { color: #e8593b; }
+  .field.invalid .option        { border-color: #ffb3a3; }
+  .field.invalid .text-input    { border-color: #ffb3a3; background: #fff5f3; }
+
+  /* --- 空状态 --- */
+  .empty {
+    padding: 34px 0;
+    text-align: center;
+    font-size: 20px;
+    color: #bda481;
+    letter-spacing: 1px;
+  }
+
+  /* ============ 提交按钮 ============ */
+  .submit-btn {
+    display: block;
+    width: 100%;
+    margin-top: 4px;
+    padding: 19px 20px;
+    font-family: inherit;
+    font-size: 25px;
+    letter-spacing: 8px;
+    text-indent: 8px;
+    color: #ffffff;
+    background: linear-gradient(180deg, #ffb057 0%, #ff8b3d 100%);
+    border: none;
+    border-radius: 999px;
+    cursor: pointer;
+    box-shadow:
+      0 9px 0 #e0702a,
+      0 16px 26px rgba(255, 140, 60, .34);
+    transition: transform .09s ease, box-shadow .09s ease, filter .18s ease;
+    touch-action: manipulation;
+  }
+  .submit-btn:active:not(:disabled) {
+    transform: translateY(7px);
+    box-shadow:
+      0 2px 0 #e0702a,
+      0 6px 12px rgba(255, 140, 60, .28);
+  }
+  .submit-btn:disabled {
+    filter: saturate(.55) brightness(1.04);
+    cursor: not-allowed;
+    opacity: .85;
+  }
+
+  .footer-tip {
+    margin: 24px 0 0;
+    font-size: 16px;
+    color: #c0a884;
+    letter-spacing: 2px;
+    text-align: center;
+  }
+
+  /* ============ 弹窗 ============ */
+  .modal-mask {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    background: rgba(96, 74, 44, .34);
+    -webkit-backdrop-filter: blur(4px);
+    backdrop-filter: blur(4px);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity .25s ease, visibility .25s ease;
+  }
+  .modal-mask.show {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .modal {
+    width: min(430px, 100%);
+    padding: 38px 36px 32px;
+    text-align: center;
+    background: #ffffff;
+    border: 6px solid #ffe8bd;
+    border-radius: 34px;
+    box-shadow: 0 24px 54px rgba(130, 96, 46, .32);
+    transform: scale(.82) translateY(22px);
+    transition: transform .34s cubic-bezier(.34, 1.56, .64, 1);
+  }
+  .modal-mask.show .modal {
+    transform: scale(1) translateY(0);
+  }
+
+  .modal-emoji {
+    font-size: 66px;
+    line-height: 1;
+    margin-bottom: 18px;
+    animation: pop 1.6s ease-in-out infinite;
+  }
+  @keyframes pop {
+    0%, 100% { transform: scale(1) rotate(-4deg); }
+    50%      { transform: scale(1.12) rotate(4deg); }
+  }
+
+  .modal-text {
+    margin: 0 0 26px;
+    font-size: 23px;
+    line-height: 1.5;
+    color: #6b4f2a;
+    letter-spacing: 1px;
+  }
+
+  .modal-btn {
+    padding: 14px 46px;
+    font-family: inherit;
+    font-size: 20px;
+    letter-spacing: 3px;
+    color: #ffffff;
+    background: linear-gradient(180deg, #8ed07a 0%, #5cb85c 100%);
+    border: none;
+    border-radius: 999px;
+    cursor: pointer;
+    box-shadow: 0 7px 0 #46a046;
+    transition: transform .09s ease, box-shadow .09s ease;
+    touch-action: manipulation;
+  }
+  .modal-btn:active {
+    transform: translateY(5px);
+    box-shadow: 0 2px 0 #46a046;
+  }
+
+  /* ============ iPad / 大屏微调 ============ */
+  @media (min-width: 768px) {
+    body { padding-top: 56px; }
+    .card { padding: 42px 46px 46px; }
+    .field-label { font-size: 22px; }
+    .option { font-size: 20px; padding: 14px 26px; }
+    .text-input { font-size: 20px; padding: 17px 24px; }
+  }
+</style>
+</head>
+
+<body>
+
+  <!-- 背景装饰层 -->
+  <div class="decor" id="decor" aria-hidden="true"></div>
+
+  <main class="page">
+    <header class="hero">
+      <h1 class="title">好友档案</h1>
+      <p class="subtitle">✨ 快来完成你的专属小档案吧 ✨</p>
+    </header>
+
+    <section class="card">
+      <form id="surveyForm" autocomplete="off" novalidate></form>
+      <button id="submitBtn" class="submit-btn" type="button">提 交</button>
+    </section>
+
+    <p class="footer-tip">🌈 填好以后记得点提交哦</p>
+  </main>
+
+  <!-- 卡通弹窗 -->
+  <div class="modal-mask" id="modalMask">
+    <div class="modal" role="dialog" aria-modal="true">
+      <div class="modal-emoji" id="modalEmoji">🎉</div>
+      <p class="modal-text" id="modalText"></p>
+      <button class="modal-btn" id="modalBtn" type="button">好的</button>
+    </div>
+  </div>
+
+<script>
+(function () {
+  'use strict';
+
+  /* ============================================================
+   *  1. 常量与默认示例数据
+   * ============================================================ */
+  var API_URL = 'https://quickform.cn/api/e3cuz2onge';
+
+  // 当 URL 中没有 fields 参数时，用于演示的默认题目
+  var DEFAULT_FIELDS = [
+    { name: '你每天做多久家务？', type: 'single', options: ['不足30分钟', '30到60分钟', '超过60分钟'] },
+    { name: '姓名', type: 'text' }
+  ];
+
+  var params = new URLSearchParams(window.location.search);
+
+  /* ============================================================
+   *  2. 解析 URL 参数
+   * ============================================================ */
+  function parseFields(raw) {
+    if (!raw) return null;
+    var tries = [raw];
+    try { tries.push(decodeURIComponent(raw)); } catch (e) { /* ignore */ }
+
+    for (var i = 0; i < tries.length; i++) {
+      var text = tries[i];
+      try {
+        var val = JSON.parse(text);
+        if (Array.isArray(val)) return val;
+        // 万一被二次编码成字符串
+        if (typeof val === 'string') {
+          try {
+            var again = JSON.parse(val);
+            if (Array.isArray(again)) return again;
+          } catch (e2) { /* ignore */ }
+        }
+      } catch (e) { /* 继续尝试下一个 */ }
+    }
+    return null;
+  }
+
+  var rawFields = params.get('fields');
+  var fields = parseFields(rawFields);
+  if (!fields) {
+    fields = rawFields ? [] : DEFAULT_FIELDS;   // 解析失败 → 空；完全没传 → 用示例
+  }
+
+  var group = params.get('group') || '';        // 组号（隐藏字段）
+
+  /* ============================================================
+   *  3. 获取 DOM
+   * ============================================================ */
+  var form        = document.getElementById('surveyForm');
+  var submitBtn   = document.getElementById('submitBtn');
+  var modalMask   = document.getElementById('modalMask');
+  var modalEmoji  = document.getElementById('modalEmoji');
+  var modalText   = document.getElementById('modalText');
+  var modalBtn    = document.getElementById('modalBtn');
+
+  /* ============================================================
+   *  4. 隐藏字段：组号
+   * ============================================================ */
+  var hiddenGroup = document.createElement('input');
+  hiddenGroup.type  = 'hidden';
+  hiddenGroup.name  = 'group';
+  hiddenGroup.value = group;
+  form.appendChild(hiddenGroup);
+
+  /* ============================================================
+   *  5. 动态渲染表单
+   * ============================================================ */
+  function createField(field, index) {
+    var name = String(field && field.name ? field.name : '问题' + (index + 1));
+    var type = String(field && field.type ? field.type : 'text').toLowerCase();
+
+    var wrap = document.createElement('div');
+    wrap.className = 'field';
+    wrap.dataset.index = index;
+
+    /* --- 题目标题 --- */
+    var label = document.createElement('div');
+    label.className = 'field-label';
+
+    var badge = document.createElement('span');
+    badge.className = 'badge';
+    badge.textContent = index + 1;
+
+    var labelText = document.createElement('span');
+    labelText.className = 'label-text';
+    labelText.textContent = name;
+
+    label.appendChild(badge);
+    label.appendChild(labelText);
+    wrap.appendChild(label);
+
+    /* --- 题型 --- */
+    if (type === 'single') {
+      var optionsWrap = document.createElement('div');
+      optionsWrap.className = 'options';
+
+      var opts = Array.isArray(field.options) ? field.options : [];
+
+      opts.forEach(function (opt) {
+        var optionLabel = document.createElement('label');
+        optionLabel.className = 'option';
+
+        var input = document.createElement('input');
+        input.type  = 'radio';
+        input.name  = 'field_' + index;
+        input.value = String(opt);
+
+        var mark = document.createElement('span');
+        mark.className = 'radio-mark';
+
+        var txt = document.createElement('span');
+        txt.className = 'option-text';
+        txt.textContent = String(opt);
+
+        optionLabel.appendChild(input);
+        optionLabel.appendChild(mark);
+        optionLabel.appendChild(txt);
+        optionsWrap.appendChild(optionLabel);
+
+        input.addEventListener('change', function () {
+          var all = optionsWrap.querySelectorAll('.option');
+          for (var k = 0; k < all.length; k++) {
+            var r = all[k].querySelector('input[type="radio"]');
+            all[k].classList.toggle('selected', !!(r && r.checked));
+          }
+          wrap.classList.remove('invalid');
+        });
+      });
+
+      if (!opts.length) {
+        var tip = document.createElement('div');
+        tip.className = 'empty';
+        tip.textContent = '这道题还没有选项哦～';
+        optionsWrap.appendChild(tip);
+      }
+
+      wrap.appendChild(optionsWrap);
+
+    } else {
+      var textInput = document.createElement('input');
+      textInput.type        = 'text';
+      textInput.className   = 'text-input';
+      textInput.name        = 'field_' + index;
+      textInput.placeholder = '在这里写下你的答案～';
+      textInput.addEventListener('input', function () {
+        wrap.classList.remove('invalid');
+      });
+      wrap.appendChild(textInput);
+    }
+
+    return wrap;
+  }
+
+  function renderForm() {
+    if (!fields.length) {
+      var empty = document.createElement('div');
+      empty.className = 'empty';
+      empty.textContent = '暂时没有题目哦～';
+      form.appendChild(empty);
+      submitBtn.disabled = true;
+      submitBtn.style.filter = 'saturate(.4)';
+      return;
+    }
+
+    fields.forEach(function (field, index) {
+      form.appendChild(createField(field || {}, index));
+    });
+  }
+
+  /* ============================================================
+   *  6. 数据收集 & 校验
+   * ============================================================ */
+  function getFieldType(field) {
+    return String(field && field.type ? field.type : 'text').toLowerCase();
+  }
+
+  function collectData() {
+    var data = {};
+    data.group = group;               // 隐藏字段：组号
+
+    fields.forEach(function (field, index) {
+      var key  = String(field && field.name ? field.name : '问题' + (index + 1));
+      var type = getFieldType(field);
+
+      if (type === 'single') {
+        var checked = form.querySelector('input[name="field_' + index + '"]:checked');
+        data[key] = checked ? checked.value : '';
+      } else {
+        var el = form.querySelector('input[name="field_' + index + '"]');
+        data[key] = el ? el.value.trim() : '';
+      }
+    });
+
+    return data;
+  }
+
+  function validate() {
+    var firstInvalid = null;
+
+    fields.forEach(function (field, index) {
+      var wrap = form.querySelector('.field[data-index="' + index + '"]');
+      if (!wrap) return;
+
+      var ok;
+      if (getFieldType(field) === 'single') {
+        ok = !!form.querySelector('input[name="field_' + index + '"]:checked');
+      } else {
+        var el = form.querySelector('input[name="field_' + index + '"]');
+        ok = !!(el && el.value.trim() !== '');
+      }
+
+      wrap.classList.remove('invalid');
+      if (!ok) {
+        // 强制重排，保证抖动动画每次都能触发
+        void wrap.offsetWidth;
+        wrap.classList.add('invalid');
+        if (!firstInvalid) firstInvalid = wrap;
+      }
+    });
+
+    if (firstInvalid) {
+      try {
+        firstInvalid.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      } catch (e) {
+        firstInvalid.scrollIntoView();
+      }
+      return false;
+    }
+    return true;
+  }
+
+  /* ============================================================
+   *  7. 弹窗
+   * ============================================================ */
+  function showModal(type, message, btnLabel) {
+    var emojis = { success: '🎉', error: '😢', warn: '✏️' };
+    modalEmoji.textContent = emojis[type] || '🎉';
+    modalText.textContent  = message;
+    modalBtn.textContent   = btnLabel || '好的';
+    modalMask.classList.add('show');
+  }
+
+  function hideModal() {
+    modalMask.classList.remove('show');
+  }
+
+  modalBtn.addEventListener('click', hideModal);
+  modalMask.addEventListener('click', function (e) {
+    if (e.target === modalMask) hideModal();
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') hideModal();
+  });
+
+  /* ============================================================
+   *  8. 提交逻辑
+   * ============================================================ */
+  var submitting = false;
+
+  function handleSubmit() {
+    if (submitting || submitBtn.disabled) return;
+
+    if (!validate()) {
+      showModal('warn', '还有题目没有填完哦～', '好的');
+      return;
+    }
+
+    var payload = collectData();
+    var originalText = submitBtn.textContent;
+
+    submitting = true;
+    submitBtn.disabled = true;
+    submitBtn.textContent = '提交中…';
+
+    fetch(API_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    })
+      .then(function (res) {
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        return res;
+      })
+      .then(function () {
+        showModal('success', '提交成功，感谢参与！', '好的');
+      })
+      .catch(function (err) {
+        console.error('提交失败：', err);
+        showModal('error', '网络开小差了，请重试', '再试一次');
+      })
+      .then(function () {
+        submitting = false;
+        submitBtn.disabled = false;
+        submitBtn.textContent = originalText;
+      });
+  }
+
+  submitBtn.addEventListener('click', handleSubmit);
+  // 键盘回车也可提交（输入框内）
+  form.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      handleSubmit();
+    }
+  });
+
+  /* ============================================================
+   *  9. 背景卡通装饰（云朵 + 星星）
+   * ============================================================ */
+  function buildDecor() {
+    var decor = document.getElementById('decor');
+    if (!decor) return;
+
+    var clouds = [
+      { top: '6%',  left: '4%',  w: 132, delay: 0,   dur: 9  },
+      { top: '17%', right: '5%', w: 108, delay: 1.5, dur: 11 },
+      { top: '56%', left: '2%',  w: 100, delay: 0.8, dur: 10 },
+      { top: '78%', right: '6%', w: 144, delay: 2.2, dur: 12 },
+      { top: '40%', right: '1%', w: 88,  delay: 1.1, dur: 8  }
+    ];
+
+    clouds.forEach(function (c) {
+      var el = document.createElement('div');
+      el.className = 'cloud';
+      el.style.top = c.top;
+      if (c.left)  el.style.left  = c.left;
+      if (c.right) el.style.right = c.right;
+      el.style.setProperty('--w', c.w + 'px');
+      el.style.animationDelay    = c.delay + 's';
+      el.style.animationDuration = c.dur + 's';
+      decor.appendChild(el);
+    });
+
+    var stars = [
+      { e: '⭐', top: '4%',  left: '26%', size: 22, delay: 0   },
+      { e: '✨', top: '13%', right: '27%', size: 20, delay: 0.8 },
+      { e: '⭐', top: '30%', left: '11%', size: 17, delay: 1.4 },
+      { e: '✨', top: '52%', right: '4%', size: 20, delay: 0.4 },
+      { e: '⭐', top: '84%', left: '20%', size: 18, delay: 1.1 },
+      { e: '✨', top: '70%', right: '26%', size: 17, delay: 1.8 },
+      { e: '⭐', top: '36%', right: '43%', size: 14, delay: 2.2 },
+      { e: '✨', top: '92%', right: '40%', size: 16, delay: 1.5 }
+    ];
+
+    stars.forEach(function (s) {
+      var el = document.createElement('span');
+      el.className = 'star';
+      el.textContent = s.e;
+      el.style.top = s.top;
+      if (s.left)  el.style.left  = s.left;
+      if (s.right) el.style.right = s.right;
+      el.style.fontSize = s.size + 'px';
+      el.style.animationDelay = s.delay + 's';
+      decor.appendChild(el);
+    });
+  }
+
+  /* ============================================================
+   *  10. 启动
+   * ============================================================ */
+  buildDecor();
+  renderForm();
+
+  // 调试信息（可在控制台查看解析结果）
+  console.log('[好友档案] fields =', fields, '| group =', group);
+
+})();
+</script>
+</body>
+</html>
