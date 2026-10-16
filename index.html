@@ -104,10 +104,6 @@
   .option.selected .checkbox-mark { border-color: #ff9f43; background: #ff9f43; }
   .option.selected .checkbox-mark::after { content: '✔'; position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; color: #ffffff; font-size: 14px; font-weight: bold; }
 
-  /* 其他输入框 */
-  .other-input { width: 130px; padding: 8px 12px; border: 3px solid #ffe3b0; border-radius: 12px; font-family: inherit; font-size: 16px; background: #fffaf0; outline: none; z-index: 20; position: relative; }
-  .other-input:focus { border-color: #ffb84d; background: #ffffff; }
-
   /* 提交按钮 */
   .submit-btn {
     display: block; width: 100%; margin-top: 20px; padding: 18px 20px;
@@ -154,110 +150,56 @@
         </div>
       </div>
 
-      <!-- 2. 出生日期 -->
-      <div class="field-row">
-        <div class="field-col">
-          <div class="field-label"><span class="badge">2</span> 出生日期</div>
-          <input type="text" id="birthday" class="text-input" placeholder="例如：2014年5月">
-        </div>
-      </div>
-
-      <!-- 3. 体重 -->
-      <div class="field-row">
-        <div class="field-col">
-          <div class="field-label"><span class="badge">3</span> 体重 (kg)</div>
-          <input type="text" id="weight" class="text-input" placeholder="例如：35">
-        </div>
-      </div>
-
-      <!-- 4. 你想去哪里玩？ (单选+其他) -->
+      <!-- 2. 你想去哪里玩？ -->
       <div class="field-row" style="flex-direction: column; gap: 10px;">
-        <div class="field-label"><span class="badge">4</span> 你想去哪里玩？</div>
+        <div class="field-label"><span class="badge">2</span> 你想去哪里玩？</div>
         <div class="options-group">
           <label class="option"><input type="radio" name="travel_place" value="北京"><span class="radio-mark"></span> 北京</label>
-          <label class="option"><input type="radio" name="travel_place" value="南京"><span class="radio-mark"></span> 南京</label>
           <label class="option"><input type="radio" name="travel_place" value="上海"><span class="radio-mark"></span> 上海</label>
           <label class="option"><input type="radio" name="travel_place" value="新疆"><span class="radio-mark"></span> 新疆</label>
-          <label class="option"><input type="radio" name="travel_place" value="其他" id="travel-other-check"><span class="radio-mark"></span> 其他</label>
-          <input type="text" id="travel-other-text" class="other-input" placeholder="请填写">
+          <label class="option"><input type="radio" name="travel_place" value="其他"><span class="radio-mark"></span> 其他</label>
         </div>
       </div>
 
-      <!-- 5. 你一般旅游多长时间 -->
+      <!-- 3. 你喜欢什么运动？ -->
       <div class="field-row" style="flex-direction: column; gap: 10px;">
-        <div class="field-label"><span class="badge">5</span> 你一般旅游多长时间</div>
-        <div class="options-group">
-          <label class="option"><input type="radio" name="travel_time" value="1-2天"><span class="radio-mark"></span> 1-2天</label>
-          <label class="option"><input type="radio" name="travel_time" value="3-4天"><span class="radio-mark"></span> 3-4天</label>
-          <label class="option"><input type="radio" name="travel_time" value="5-6天"><span class="radio-mark"></span> 5-6天</label>
-          <label class="option"><input type="radio" name="travel_time" value="7天以上"><span class="radio-mark"></span> 7天以上</label>
-        </div>
-      </div>
-
-      <!-- 6. 你想去苏州吗？ -->
-      <div class="field-row" style="flex-direction: column; gap: 10px;">
-        <div class="field-label"><span class="badge">6</span> 你想去苏州吗？</div>
-        <div class="options-group">
-          <label class="option"><input type="radio" name="go_suzhou" value="不想"><span class="radio-mark"></span> 不想</label>
-          <label class="option"><input type="radio" name="go_suzhou" value="有点想"><span class="radio-mark"></span> 有点想</label>
-          <label class="option"><input type="radio" name="go_suzhou" value="非常想去"><span class="radio-mark"></span> 非常想去</label>
-        </div>
-      </div>
-
-      <!-- 7. 你最喜欢什么运动 (单选+其他) -->
-      <div class="field-row" style="flex-direction: column; gap: 10px;">
-        <div class="field-label"><span class="badge">7</span> 你最喜欢什么运动</div>
+        <div class="field-label"><span class="badge">3</span> 你喜欢什么运动？</div>
         <div class="options-group">
           <label class="option"><input type="radio" name="sport" value="跳绳"><span class="radio-mark"></span> 跳绳</label>
           <label class="option"><input type="radio" name="sport" value="跑步"><span class="radio-mark"></span> 跑步</label>
           <label class="option"><input type="radio" name="sport" value="游泳"><span class="radio-mark"></span> 游泳</label>
-          <label class="option"><input type="radio" name="sport" value="其他" id="sport-other-check"><span class="radio-mark"></span> 其他</label>
-          <input type="text" id="sport-other-text" class="other-input" placeholder="请填写">
+          <label class="option"><input type="radio" name="sport" value="其他"><span class="radio-mark"></span> 其他</label>
         </div>
       </div>
 
-      <!-- 8. 你每次运动多久？ -->
+      <!-- 4. 你每次运动多久？ -->
       <div class="field-row" style="flex-direction: column; gap: 10px;">
-        <div class="field-label"><span class="badge">8</span> 你每次运动多久？</div>
+        <div class="field-label"><span class="badge">4</span> 你每次运动多久？</div>
         <div class="options-group">
-          <label class="option"><input type="radio" name="sport_duration" value="10分钟以内"><span class="radio-mark"></span> 10分钟以内</label>
-          <label class="option"><input type="radio" name="sport_duration" value="10-20分钟"><span class="radio-mark"></span> 10-20分钟</label>
-          <label class="option"><input type="radio" name="sport_duration" value="20分钟以上"><span class="radio-mark"></span> 20分钟以上</label>
+          <label class="option"><input type="radio" name="sport_duration" value="30分钟"><span class="radio-mark"></span> 30分钟</label>
+          <label class="option"><input type="radio" name="sport_duration" value="30-60分钟"><span class="radio-mark"></span> 30-60分钟</label>
+          <label class="option"><input type="radio" name="sport_duration" value="60分钟以上"><span class="radio-mark"></span> 60分钟以上</label>
         </div>
       </div>
 
-      <!-- 9. 你每周运动几次？ -->
+      <!-- 5. 你喜欢吃什么水果？ -->
       <div class="field-row" style="flex-direction: column; gap: 10px;">
-        <div class="field-label"><span class="badge">9</span> 你每周运动几次？</div>
+        <div class="field-label"><span class="badge">5</span> 你喜欢吃什么水果？</div>
         <div class="options-group">
-          <label class="option"><input type="radio" name="sport_freq" value="1-2次"><span class="radio-mark"></span> 1-2次</label>
-          <label class="option"><input type="radio" name="sport_freq" value="3-4次"><span class="radio-mark"></span> 3-4次</label>
-          <label class="option"><input type="radio" name="sport_freq" value="5-6次"><span class="radio-mark"></span> 5-6次</label>
-          <label class="option"><input type="radio" name="sport_freq" value="7次以上"><span class="radio-mark"></span> 7次以上</label>
+          <label class="option"><input type="radio" name="fruit" value="苹果"><span class="radio-mark"></span> 苹果</label>
+          <label class="option"><input type="radio" name="fruit" value="香蕉"><span class="radio-mark"></span> 香蕉</label>
+          <label class="option"><input type="radio" name="fruit" value="西瓜"><span class="radio-mark"></span> 西瓜</label>
+          <label class="option"><input type="radio" name="fruit" value="其他"><span class="radio-mark"></span> 其他</label>
         </div>
       </div>
 
-      <!-- 10. 你喜欢吃什么？ (单选+其他) -->
+      <!-- 6. 你喜欢喝草莓味酸奶吗？ -->
       <div class="field-row" style="flex-direction: column; gap: 10px;">
-        <div class="field-label"><span class="badge">10</span> 你喜欢吃什么？</div>
+        <div class="field-label"><span class="badge">6</span> 你喜欢喝草莓味酸奶吗？</div>
         <div class="options-group">
-          <label class="option"><input type="radio" name="food" value="香蕉"><span class="radio-mark"></span> 香蕉</label>
-          <label class="option"><input type="radio" name="food" value="苹果"><span class="radio-mark"></span> 苹果</label>
-          <label class="option"><input type="radio" name="food" value="草莓"><span class="radio-mark"></span> 草莓</label>
-          <label class="option"><input type="radio" name="food" value="其他" id="food-other-check"><span class="radio-mark"></span> 其他</label>
-          <input type="text" id="food-other-text" class="other-input" placeholder="请填写">
-        </div>
-      </div>
-
-      <!-- 11. 你喜欢吃什么口味？ (单选+其他) -->
-      <div class="field-row" style="flex-direction: column; gap: 10px;">
-        <div class="field-label"><span class="badge">11</span> 你喜欢吃什么口味？</div>
-        <div class="options-group">
-          <label class="option"><input type="radio" name="taste" value="酸的"><span class="radio-mark"></span> 酸的</label>
-          <label class="option"><input type="radio" name="taste" value="甜的"><span class="radio-mark"></span> 甜的</label>
-          <label class="option"><input type="radio" name="taste" value="辣的"><span class="radio-mark"></span> 辣的</label>
-          <label class="option"><input type="radio" name="taste" value="其他" id="taste-other-check"><span class="radio-mark"></span> 其他</label>
-          <input type="text" id="taste-other-text" class="other-input" placeholder="请填写">
+          <label class="option"><input type="radio" name="yogurt" value="不喜欢"><span class="radio-mark"></span> 不喜欢</label>
+          <label class="option"><input type="radio" name="yogurt" value="比较喜欢"><span class="radio-mark"></span> 比较喜欢</label>
+          <label class="option"><input type="radio" name="yogurt" value="喜欢"><span class="radio-mark"></span> 喜欢</label>
         </div>
       </div>
 
@@ -344,7 +286,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   });
 
-  // 点击遮罩：仅在非成功弹窗时允许关闭（避免误触丢失“再填一次”入口）
+  // 点击遮罩：仅在非成功弹窗时允许关闭
   modalMask.addEventListener('click', function (e) {
     if (e.target === modalMask && !modalAction) hideModal();
   });
@@ -373,20 +315,11 @@ document.addEventListener('DOMContentLoaded', function () {
     var payload = {
       group: group,
       "学号": studentId,
-      "出生日期": document.getElementById('birthday').value.trim(),
-      "体重": document.getElementById('weight').value.trim(),
       "你想去哪里玩": getSelectedRadio('travel_place'),
-      "你想去哪里玩_其他": document.getElementById('travel-other-text').value.trim(),
-      "你一般旅游多长时间": getSelectedRadio('travel_time'),
-      "你想去苏州吗": getSelectedRadio('go_suzhou'),
-      "你最喜欢什么运动": getSelectedRadio('sport'),
-      "你最喜欢什么运动_其他": document.getElementById('sport-other-text').value.trim(),
+      "你喜欢什么运动": getSelectedRadio('sport'),
       "你每次运动多久": getSelectedRadio('sport_duration'),
-      "你每周运动几次": getSelectedRadio('sport_freq'),
-      "你喜欢吃什么": getSelectedRadio('food'),
-      "你喜欢吃什么_其他": document.getElementById('food-other-text').value.trim(),
-      "你喜欢吃什么口味": getSelectedRadio('taste'),
-      "你喜欢吃什么口味_其他": document.getElementById('taste-other-text').value.trim()
+      "你喜欢吃什么水果": getSelectedRadio('fruit'),
+      "你喜欢喝草莓味酸奶吗": getSelectedRadio('yogurt')
     };
 
     // 3. 提交
@@ -407,9 +340,6 @@ document.addEventListener('DOMContentLoaded', function () {
       .then(function () {
         // 提交成功：显示“提交成功！” + “再填一次”按钮
         showModal('success', '提交成功！', '再填一次', function () {
-          // 【修改点】不进行页面跳转，直接在当前页重置表单
-          // 这样不仅不会出现404错误，还能瞬间清空表单，方便下一位同学填写
-          
           // 1. 重置表单（清空所有输入框和单选框的选中状态）
           document.getElementById('surveyForm').reset();
           
@@ -440,21 +370,6 @@ document.addEventListener('DOMContentLoaded', function () {
         submitBtn.textContent = originalText;
       });
   });
-
-  // 如果选中“其他”，自动聚焦到输入框
-  function bindOtherFocus(checkId, textId) {
-    var check = document.getElementById(checkId);
-    var text = document.getElementById(textId);
-    if (check && text) {
-      check.addEventListener('change', function() {
-        if (this.checked) text.focus();
-      });
-    }
-  }
-  bindOtherFocus('travel-other-check', 'travel-other-text');
-  bindOtherFocus('sport-other-check', 'sport-other-text');
-  bindOtherFocus('food-other-check', 'food-other-text');
-  bindOtherFocus('taste-other-check', 'taste-other-text');
 
   /* ============ 背景装饰构建 ============ */
   var decor = document.getElementById('decor');
